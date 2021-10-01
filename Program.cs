@@ -12,14 +12,14 @@ namespace pongGame
             drawFrame();
 
             int x = 130;
-            int y = 20;
+            int[] y = new int[]{ 20, 21, 22, 23, 24, 25, 26, 27 };            
             int y0 = 0;
             int direction = 0;
-            drawPlayer(y,x);
+            drawPlayer(x,y);
 
             while (true)
             {
-                Console.SetCursorPosition(x, y);
+                Console.SetCursorPosition(x, y[0]);
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
                 switch (keyInfo.Key)
@@ -34,20 +34,26 @@ namespace pongGame
 
                 if (direction > 0)
                 {
-                    y0 = y + 7;
+                    y0 = y[7];
                     direction = 0;
-                    y = y - 1;
-                    drawPlayer(y, x);
-                    deletePlayer(y0, x);
+                    for (int i = 0; i < y.Length; i++)
+                    {
+                        y[i] = y[i] - 1;
+                    }                    
+                    drawPlayer(x, y);
+                    deletePlayer(x, y0);
                 }
 
                 if (direction < 0)
                 {
-                    y0 = y;
+                    y0 = y[0];
                     direction = 0;
-                    y = y + 1;
-                    drawPlayer(y, x);
-                    deletePlayer(y0, x);
+                    for (int i = 0; i < y.Length; i++)
+                    {
+                        y[i] = y[i] + 1;
+                    }
+                    drawPlayer(x, y);
+                    deletePlayer(x, y0);
                 }
             }
             
@@ -71,32 +77,28 @@ namespace pongGame
                     {
                         Console.Write("-");
                     }
+                    else if (x == 79 && y > 6 && y < 38)
+                    {
+                        Console.Write("●");
+
+                    }
                 }
             }
         }
 
-        public static void drawPlayer(int dY, int dX)
+        public static void drawPlayer(int dX, int[] dY)
         {
-            for (int y = dY; y < dY + 8; y++)
+            for (int y = 0; y < dY.Length; y++)
             {
-                for (int x = dX; x < dX + 2; x++)
-                {
-                    Console.SetCursorPosition(x, y);
-                    Console.Write("█");
-                }
+                Console.SetCursorPosition(dX, dY[y]);
+                Console.Write("█");     
             }
         }
 
-        public static void deletePlayer(int dY, int dX)
+        public static void deletePlayer(int dX, int dY)
         {
-            for (int y = dY; y < dY + 1; y++)
-            {
-                for (int x = dX; x < dX + 2; x++)
-                {
-                    Console.SetCursorPosition(x, y);
-                    Console.Write(" ");
-                }
-            }
+            Console.SetCursorPosition(dX, dY);
+            Console.Write(" ");
         }
     }
 }
