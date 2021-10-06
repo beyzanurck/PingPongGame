@@ -17,18 +17,33 @@ namespace pongGame
             int direction = 0;
             drawPlayer(x,y);
 
+            int ballX;
+            int ballY;
             while (true)
             {
-                Console.SetCursorPosition(x, y[0]);
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
+
+                while (Console.KeyAvailable)
+                {
+                    keyInfo = Console.ReadKey();
+                }
 
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        direction += 1;
+
+                        if (y[0] != 6)
+                        {
+                            direction += 1;
+                        }
                         break;
+
                     case ConsoleKey.DownArrow:
-                        direction -= 1;
+
+                        if (y[7] != 38)
+                        {
+                            direction -= 1;
+                        }
                         break;
                 }
 
@@ -39,7 +54,7 @@ namespace pongGame
                     for (int i = 0; i < y.Length; i++)
                     {
                         y[i] = y[i] - 1;
-                    }                    
+                    }
                     drawPlayer(x, y);
                     deletePlayer(x, y0);
                 }
@@ -55,10 +70,14 @@ namespace pongGame
                     drawPlayer(x, y);
                     deletePlayer(x, y0);
                 }
-            }
-            
 
-            Console.ReadLine();
+
+
+                throwBall(out ballX, out ballY);
+                Console.SetCursorPosition(ballX, ballY);
+                Console.Write("x");
+            }            
+
         }
 
         public static void drawFrame()
@@ -77,7 +96,7 @@ namespace pongGame
                     {
                         Console.Write("-");
                     }
-                    else if (x == 79 && y > 6 && y < 38)
+                    else if (x == 81 && y > 6 && y < 38)
                     {
                         Console.Write("●");
 
@@ -91,14 +110,27 @@ namespace pongGame
             for (int y = 0; y < dY.Length; y++)
             {
                 Console.SetCursorPosition(dX, dY[y]);
-                Console.Write("█");     
+                Console.Write("██");  
             }
         }
 
         public static void deletePlayer(int dX, int dY)
         {
             Console.SetCursorPosition(dX, dY);
-            Console.Write(" ");
+            Console.Write("  ");
+        }
+
+        public static void throwBall( out int x, out int y)
+        {
+            Random random = new Random();
+            int yPoint = random.Next(7, 38);
+            yPoint = 5;
+            double teta = (22 - yPoint) / 49;
+            double radyanOfTeta = (teta * Math.PI / 180);
+
+            x = Convert.ToInt32(Math.Cos(radyanOfTeta));
+            y = Convert.ToInt32(Math.Sin(radyanOfTeta));
+
         }
     }
 }
