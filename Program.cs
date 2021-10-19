@@ -12,18 +12,44 @@ namespace pongGame
             drawFrame();
 
             int x = 130;
-            int[] y = new int[]{ 20, 21, 22, 23, 24, 25, 26, 27 };            
+            int[] y = new int[] { 20, 21, 22, 23, 24, 25, 26, 27 };
             int y0 = 0;
             int direction = 0;
-            drawPlayer(x,y);
+            drawPlayer(x, y);
 
-            int ballX;
-            int ballY;
+            double xOfAngle;
+            double yOfAngle;
 
-            throwBall(out ballX,out ballY);
-            Console.SetCursorPosition(ballX+81, ballY+7);
-            Console.Write("X");
-            
+            double angle = throwBall();
+            int ballX = 0;
+            int ballY = 0;
+
+            int destroyBallX = 0;
+            int destroyBallY = 0;
+
+            int a = 81, b = 7;
+            //throwBall(out xOfAngle,out yOfAngle);
+
+            //for (int r = 0; r < 50; r=r+4)
+            //{
+            //    ballX = Convert.ToInt32(xOfAngle * r);
+            //    ballY = Convert.ToInt32(yOfAngle * r);
+
+            //    Console.SetCursorPosition(destroyBallX + 81, destroyBallY + 7);
+            //    Console.Write(" ");
+
+            //    destroyBallX = ballX;
+            //    destroyBallY = ballY;
+
+            //    Console.SetCursorPosition(ballX + 81, ballY + 7);
+            //    Console.Write("X");
+
+
+            //}
+
+            int dirOfBall = 1;
+
+            int r = 0;
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -76,7 +102,110 @@ namespace pongGame
                     deletePlayer(x, y0);
                 }
 
-            }            
+
+                if (dirOfBall == 1)
+                {
+                    r += 4;
+
+                    ballX = Convert.ToInt32(Math.Cos(angle) * r);
+                    ballY = Convert.ToInt32(Math.Sin(angle) * r);
+                    
+                }
+
+
+                if (ballX > 130 - 81 && dirOfBall != 4)
+                {
+                    dirOfBall = 2;
+                    r = 0;
+                    
+                }
+                if (dirOfBall == 2)
+                {
+                    r += 4;
+                    ballX = Convert.ToInt32(Math.Cos(Math.PI - angle) * r);
+                    ballY = Convert.ToInt32(Math.Sin(Math.PI - angle) * r);
+                    
+                }
+
+
+                if (ballY > 38 - 22)
+                {
+                    dirOfBall = 3;
+                    r = 0;
+                }
+                if (dirOfBall == 3)
+                {
+                    r += 4;
+
+                    ballX = Convert.ToInt32(Math.Cos(Math.PI + angle) * r);
+                    ballY = Convert.ToInt32(Math.Sin(Math.PI + angle) * r);
+                    
+                }
+
+                if (ballX < -46 && dirOfBall !=2) // 
+                {
+                    dirOfBall = 4;
+                    r = 0;
+                }
+                if (dirOfBall == 4)
+                {
+                    r += 4;
+
+                    ballX = Convert.ToInt32(Math.Cos(2*Math.PI - angle) * r);
+                    ballY = Convert.ToInt32(Math.Sin(2*Math.PI - angle) * r);
+                    
+                }
+
+
+                Console.SetCursorPosition(destroyBallX + a, destroyBallY + b);
+                Console.Write(" ");
+
+                destroyBallX = ballX;
+                destroyBallY = ballY;
+
+
+                if (dirOfBall== 1)
+                {
+                    a = 81;
+                    b = 7;
+                }
+              
+               
+
+                if (dirOfBall == 2)
+                {
+                    a = 130;
+                    b = 22;
+
+                }
+
+                if (dirOfBall == 3)
+                {
+                    a = 72;
+                    b = 38;
+
+                }
+
+                if (dirOfBall == 4)
+                {
+                    a = 25;
+                    b = 22;
+
+                }
+                if (ballY < -15)
+                {
+                    dirOfBall = 1;
+                    r = 0;
+                }
+                Console.SetCursorPosition(ballX + a, ballY + b);
+                Console.Write("X");
+
+
+
+              
+
+
+            }
 
         }
         public static void drawFrame()
@@ -109,7 +238,7 @@ namespace pongGame
             for (int y = 0; y < dY.Length; y++)
             {
                 Console.SetCursorPosition(dX, dY[y]);
-                Console.Write("██");  
+                Console.Write("██");
             }
         }
 
@@ -119,16 +248,28 @@ namespace pongGame
             Console.Write("  ");
         }
 
-        public static void throwBall(out int x, out int y)
+        //public static void throwBall(out double x, out double y)
+        //{
+        //    Random random = new Random();
+        //    int yPoint = random.Next(7, 38);
+        //    yPoint = 7;
+        //    double teta = Math.Atan2(15,53); //radyan            
+
+        //    x = (Math.Cos(teta));
+        //    y = (Math.Sin(teta));
+
+        //}
+
+        public static double throwBall()
         {
             Random random = new Random();
             int yPoint = random.Next(7, 38);
             yPoint = 7;
-            double teta = Math.Atan2(15,53); //radyan            
+            double teta = Math.Atan2(15, 53); //radyan            
 
-            x = Convert.ToInt32(Math.Cos(teta));
-            y = Convert.ToInt32(Math.Sin(teta));
+            return teta;
+
+
         }
-
     }
 }
