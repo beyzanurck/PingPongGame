@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 
 namespace pongGame
 {
@@ -34,34 +35,40 @@ namespace pongGame
             int destroyBallX = 0;
             int destroyBallY = 0;
 
-            double r = 1;
-           
+            double r = 4;
+
+            Random random = new Random();
+            double forReflectedAngle;
+
             while (true)
             {
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-
-                while (Console.KeyAvailable)
+                if (Console.KeyAvailable)
                 {
-                    keyInfo = Console.ReadKey();
-                }
+                    ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-                switch (keyInfo.Key)
-                {
-                    case ConsoleKey.UpArrow:
+                    while (Console.KeyAvailable)
+                    {
+                        keyInfo = Console.ReadKey();
+                    }
 
-                        if (y[0] != 6)
-                        {
-                            direction += 1;
-                        }
-                        break;
+                    switch (keyInfo.Key)
+                    {
+                        case ConsoleKey.UpArrow:
 
-                    case ConsoleKey.DownArrow:
+                            if (y[0] != 6)
+                            {
+                                direction += 1;
+                            }
+                            break;
 
-                        if (y[7] != 38)
-                        {
-                            direction -= 1;
-                        }
-                        break;
+                        case ConsoleKey.DownArrow:
+
+                            if (y[7] != 38)
+                            {
+                                direction -= 1;
+                            }
+                            break;
+                    }
                 }
 
                 if (direction > 0)
@@ -99,23 +106,34 @@ namespace pongGame
                 Console.SetCursorPosition(0, 6);
                 Console.Write("top x noktası: " + Convert.ToInt32(pointXofBall));
 
-                if (Convert.ToInt32(positionXofBall) > 131 )
+                forReflectedAngle = random.NextDouble();
+                Console.SetCursorPosition(0,7);
+                Console.Write("yansıyan açı random: "+ forReflectedAngle);
+                forReflectedAngle = forReflectedAngle * 6 - 3;
+
+                if (Convert.ToInt32(positionXofBall) > 130 )
                 {
                     angle = Math.PI - theta;
+                    //angle += forReflectedAngle;
                 }
-                if (Convert.ToInt32(positionXofBall) < 27)
+                if (Convert.ToInt32(positionXofBall) < 24)
                 {
                     angle = 2 * Math.PI - theta;
+                   // angle += forReflectedAngle;
+
                 }
                 if (Convert.ToInt32(positionYofBall) > 37)
                 {
                     angle = Math.PI + theta;
+                   // angle += forReflectedAngle;
+
                 }
                 if (Convert.ToInt32(positionYofBall) < 7)
                 {
                     angle = theta;
+                   // angle += forReflectedAngle;
                 }
-              
+
                 Console.SetCursorPosition(destroyBallX, destroyBallY);
                 Console.Write(" ");
 
@@ -123,7 +141,10 @@ namespace pongGame
                 destroyBallY = Convert.ToInt32(positionYofBall);
 
                 Console.SetCursorPosition(Convert.ToInt32(positionXofBall), Convert.ToInt32(positionYofBall));
-                Console.Write("X");
+                Console.Write("●");
+
+                Thread.Sleep(125);
+                
             }
         }
         public static void drawFrame()
@@ -166,8 +187,8 @@ namespace pongGame
         public static double throwBall(out double yPoint)
         {
             Random random = new Random();
-            yPoint = random.Next(7, 23); //7, 38)
-            yPoint = 7;
+            yPoint = random.Next(7, 38); //7, 38)  
+            yPoint = 8;
             double teta = Math.Atan2(22-yPoint, 53); //radyan            
 
             return teta;
