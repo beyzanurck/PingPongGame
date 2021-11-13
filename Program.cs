@@ -153,11 +153,19 @@ namespace pongGame
                 Console.SetCursorPosition(destroyBallX, destroyBallY);
                 Console.Write(" ");
 
+
+                if (destroyBallX == 81)
+                {
+                    Console.SetCursorPosition(destroyBallX, destroyBallY);
+                    Console.WriteLine("●");
+                }
+
                 destroyBallX = Convert.ToInt32(positionXofBall);
                 destroyBallY = Convert.ToInt32(positionYofBall);
 
                 Console.SetCursorPosition(Convert.ToInt32(positionXofBall), Convert.ToInt32(positionYofBall));
                 Console.Write("●");
+
 
                 Thread.Sleep(125);
             }
