@@ -40,6 +40,10 @@ namespace pongGame
             Random random = new Random();
             double forReflectedAngle;
 
+            int enemyX = 28;
+            int[] enemyY = new int[] { 20, 21, 22, 23, 24, 25, 26, 27 };
+            int e0 = 0;
+
             while (true)
             {
                 if (Console.KeyAvailable)
@@ -70,6 +74,33 @@ namespace pongGame
                             break;
                     }
                 }
+                
+
+                if (positionYofBall - enemyY[3] > 0 && enemyY[3] != 33)
+                {
+                    e0 = enemyY[0];                    
+                    for (int i = 0; i < enemyY.Length; i++)
+                    {
+                        enemyY[i] = enemyY[i] + 1;
+                    }
+                
+                    drawEnemy(enemyX,enemyY);
+                    deletePlayer(enemyX, e0);
+                }
+                if (positionYofBall - enemyY[3] < 0 && enemyY[3] != 9)
+                {
+                    e0 = enemyY[7];
+                    for (int i = 0; i < enemyY.Length; i++)
+                    {
+                        enemyY[i] = enemyY[i] - 1;
+                    }
+
+                    drawEnemy(enemyX, enemyY);
+                    deletePlayer(enemyX, e0);
+                }
+
+                Console.SetCursorPosition(0, 9);
+                Console.Write(" enemy mid point: {0}", enemyY[3]);
 
                 if (direction > 0)
                 {
@@ -94,6 +125,7 @@ namespace pongGame
                     drawPlayer(x, y);
                     deletePlayer(x, y0);
                 }
+
 
                 pointXofBall = (Math.Cos(angle) * r);
                 pointYofBall = (Math.Sin(angle) * r);
@@ -207,11 +239,20 @@ namespace pongGame
             Console.SetCursorPosition(dX, dY);
             Console.Write("  ");
         }
+
+        public static void drawEnemy(int dX, int[] dY)
+        {
+            for (int y = 0; y < dY.Length; y++)
+            {
+                Console.SetCursorPosition(dX, dY[y]);
+                Console.Write("██");
+            }
+        }
         public static double throwBall(out double yPoint)
         {
             Random random = new Random();
             yPoint = random.Next(7, 38);
-            yPoint = 21;
+            yPoint = 35;
           
             double teta = Math.Atan2(22-yPoint, 53); //radyan                
 
