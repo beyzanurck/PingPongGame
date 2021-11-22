@@ -12,7 +12,7 @@ namespace pongGame
             Console.OutputEncoding = Encoding.Unicode;
             drawFrame();
 
-            int x = 130;
+            int x = 132;
             int[] y = new int[] { 20, 21, 22, 23, 24, 25, 26, 27 };
             int y0 = 0;
             int direction = 0;
@@ -30,7 +30,8 @@ namespace pongGame
             double pointYofBall = 0;
 
             Console.SetCursorPosition(0,4);
-            Console.Write("top y konumu: " + positionYofBall);          
+            Console.Write("top y konumu: " + positionYofBall);
+
 
             int destroyBallX = 0;
             int destroyBallY = 0;
@@ -40,7 +41,7 @@ namespace pongGame
             Random random = new Random();
             double forReflectedAngle;
 
-            int enemyX = 28;
+            int enemyX = 27;
             int[] enemyY = new int[] { 20, 21, 22, 23, 24, 25, 26, 27 };
             int e0 = 0;
 
@@ -73,8 +74,7 @@ namespace pongGame
                             }
                             break;
                     }
-                }
-                
+                }                
 
                 if (positionYofBall - enemyY[3] > 0 && enemyY[3] != 33)
                 {
@@ -87,6 +87,7 @@ namespace pongGame
                     drawEnemy(enemyX,enemyY);
                     deletePlayer(enemyX, e0);
                 }
+
                 if (positionYofBall - enemyY[3] < 0 && enemyY[3] != 9)
                 {
                     e0 = enemyY[7];
@@ -126,55 +127,65 @@ namespace pongGame
                     deletePlayer(x, y0);
                 }
 
-
                 pointXofBall = (Math.Cos(angle) * r);
                 pointYofBall = (Math.Sin(angle) * r);
 
                 positionXofBall += pointXofBall;
                 positionYofBall += pointYofBall;
 
+                Console.SetCursorPosition(0, 2);
+                Console.Write("top x konumu: {0} ", Convert.ToInt32(positionXofBall));
                 Console.SetCursorPosition(0, 3);
-                Console.Write("angle: " + angle * 180 / (Math.PI));
-                Console.SetCursorPosition(0, 5);
-                Console.Write("top x konumu:      ");
-                Console.SetCursorPosition(0, 5);
-                Console.Write("top x konumu: " + Convert.ToInt32(positionXofBall));
-                Console.SetCursorPosition(0, 6);
-                Console.Write("top x noktası: " + Convert.ToInt32(pointXofBall));
-
-                Console.SetCursorPosition(0, 7);
-                Console.Write("top y konumu: " + Convert.ToInt32(positionYofBall));
-                Console.SetCursorPosition(0, 8);
-                Console.Write("top y noktası: " + Convert.ToInt32(pointYofBall));
+                Console.Write("top y konumu: " + Convert.ToInt32(positionYofBall));               
+                
 
                 //forReflectedAngle = random.NextDouble();
                 //Console.SetCursorPosition(0,7);
                 //Console.Write("yansıyan açı random: "+ forReflectedAngle);
                 //forReflectedAngle = forReflectedAngle * 6 - 3;
 
-                if (Convert.ToInt32(positionXofBall) > 130)
+                bool isCollision = false;
+
+                for (int i = 0; i < y.Length; i++)
                 {
-                    //angle = Math.PI - theta;  
+                    if (Convert.ToInt32(positionYofBall) == y[i])
+                    {
+                        isCollision = true;
+                        break;
+                    }
+                }
+
+                bool isCollisionForEnemy = false;
+
+                for (int i = 0; i < enemyY.Length; i++)
+                {
+                    if (Convert.ToInt32(positionYofBall) == enemyY[i])
+                    {
+                        isCollisionForEnemy = true;
+                        break;
+                    }
+                }
+
+                if ((positionXofBall <= 130 + r/2 && positionXofBall >= 130 - r/2) &&
+                    isCollision)
+                {
                     if (angle < Math.PI) angle += (Math.PI - 2 * atheta);
                     else angle -= (Math.PI - 2 * atheta);
                 }
-                if (Convert.ToInt32(positionXofBall) < 24)
+                if ((positionXofBall <= 30 + r / 2 && positionXofBall >= 30 - r/2) &&
+                    isCollisionForEnemy)
                 {
-                    //angle = 2 * Math.PI - theta;
                     if (angle < Math.PI) angle -= (Math.PI - 2 * atheta);
                     else angle += (Math.PI - 2 * atheta);
-
                 }
                 if (Convert.ToInt32(positionYofBall) > 37)
                 {
-                    //angle = Math.PI + theta; 
                     if (angle < Math.PI / 2) angle -= (2 * atheta);
                     else angle += (2 * atheta);
 
                 }
                 if (Convert.ToInt32(positionYofBall) < 7)
                 {
-                    //angle = theta;       
                     if (angle > 3 * Math.PI / 2) angle += (2 * atheta);
                     else angle -= (2 * atheta);
                 }
@@ -184,7 +195,6 @@ namespace pongGame
 
                 Console.SetCursorPosition(destroyBallX, destroyBallY);
                 Console.Write(" ");
-
 
                 if (destroyBallX == 81)
                 {
@@ -198,7 +208,6 @@ namespace pongGame
                 Console.SetCursorPosition(Convert.ToInt32(positionXofBall), Convert.ToInt32(positionYofBall));
                 Console.Write("●");
 
-
                 Thread.Sleep(125);
             }
         }
@@ -206,11 +215,11 @@ namespace pongGame
         {
             for (int y = 5; y < 40; y++)
             {
-                for (int x = 25; x < 135; x++)
+                for (int x = 25; x < 136; x++)
                 {
                     Console.SetCursorPosition(x, y);
 
-                    if (x == 25 || x == 134)
+                    if (x == 25 || x == 135)
                     {
                         Console.Write("|");
                     }
@@ -221,7 +230,6 @@ namespace pongGame
                     else if (x == 81 && y > 6 && y < 38)
                     {
                         Console.Write("●");
-
                     }
                 }
             }
@@ -251,9 +259,8 @@ namespace pongGame
         public static double throwBall(out double yPoint)
         {
             Random random = new Random();
-            yPoint = random.Next(7, 38);
-            yPoint = 35;
-          
+            yPoint = random.Next(7, 38);           
+
             double teta = Math.Atan2(22-yPoint, 53); //radyan                
 
             return teta;
