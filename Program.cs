@@ -21,7 +21,6 @@ namespace pongGame
 
             double positionXofBall = 81;
             double positionYofBall;
-            int directionOfBall;
 
             double theta = throwBall(out positionYofBall);
             double angle = theta;
@@ -30,17 +29,12 @@ namespace pongGame
             double pointXofBall = 0;
             double pointYofBall = 0;
 
-            Console.SetCursorPosition(0,4);
-            Console.Write("top y konumu: " + positionYofBall);
-
-
             int destroyBallX = 0;
             int destroyBallY = 0;
 
             double r = 4;
 
             Random random = new Random();
-            double forReflectedAngle;
 
             int enemyX = 27;
             int[] enemyY = new int[] { 20, 21, 22, 23, 24, 25, 26, 27 };
@@ -101,9 +95,6 @@ namespace pongGame
                     deletePlayer(enemyX, e0);
                 }
 
-                Console.SetCursorPosition(0, 9);
-                Console.Write(" enemy mid point: {0}", enemyY[3]);
-
                 if (direction > 0)
                 {
                     y0 = y[7];
@@ -132,19 +123,8 @@ namespace pongGame
                 pointYofBall = (Math.Sin(angle) * r);
 
                 positionXofBall += pointXofBall;
-                positionYofBall += pointYofBall;
-
-                Console.SetCursorPosition(0, 2);
-                Console.Write("top x konumu: {0} ", Convert.ToInt32(positionXofBall));
-                Console.SetCursorPosition(0, 3);
-                Console.Write("top y konumu: " + Convert.ToInt32(positionYofBall));               
+                positionYofBall += pointYofBall;              
                 
-
-                //forReflectedAngle = random.NextDouble();
-                //Console.SetCursorPosition(0,7);
-                //Console.Write("yansıyan açı random: "+ forReflectedAngle);
-                //forReflectedAngle = forReflectedAngle * 6 - 3;
-
                 bool isCollision = false;
 
                 for (int i = 0; i < y.Length; i++)
@@ -194,7 +174,6 @@ namespace pongGame
                 angle = angle % (2 * Math.PI);
                 if (angle < 0) angle += 2 * Math.PI;
 
-
                 Console.SetCursorPosition(destroyBallX, destroyBallY);
                 Console.Write(" ");
 
@@ -208,23 +187,29 @@ namespace pongGame
                 destroyBallY = Convert.ToInt32(positionYofBall);
 
                 Console.SetCursorPosition(Convert.ToInt32(positionXofBall), Convert.ToInt32(positionYofBall));
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Write("●");
+                Console.ForegroundColor = ConsoleColor.White;
 
-                if (positionXofBall >=133)
-                {
-                    break;
-                }
+                if (positionXofBall >= 133) break;
 
-                Thread.Sleep(125);
+                if (score < 50) Thread.Sleep(125);
+                
+                if (score >= 50 && score < 100) Thread.Sleep(100);
+                 
+                if (score>=100) Thread.Sleep(50);
+                
+                Console.SetCursorPosition(125, 4);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Score: {0}", score);
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
-            Console.SetCursorPosition(100, 20);
-            Console.WriteLine("You Lose!!");
-            Console.SetCursorPosition(100, 21);
-            Console.WriteLine("Your score is {0}", score);
+            scoring(score);
 
             Console.ReadLine();
         }
+
         public static void drawFrame()
         {
             for (int y = 5; y < 40; y++)
@@ -248,14 +233,19 @@ namespace pongGame
                 }
             }
         }
+
         public static void drawPlayer(int dX, int[] dY)
         {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+
             for (int y = 0; y < dY.Length; y++)
             {
                 Console.SetCursorPosition(dX, dY[y]);
                 Console.Write("██");
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
+
         public static void deletePlayer(int dX, int dY)
         {
             Console.SetCursorPosition(dX, dY);
@@ -264,20 +254,34 @@ namespace pongGame
 
         public static void drawEnemy(int dX, int[] dY)
         {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+
             for (int y = 0; y < dY.Length; y++)
             {
                 Console.SetCursorPosition(dX, dY[y]);
                 Console.Write("██");
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
+
         public static double throwBall(out double yPoint)
         {
             Random random = new Random();
             yPoint = random.Next(7, 38);
-            yPoint = 7;
+
             double teta = Math.Atan2(22-yPoint, 53); //radyan                
 
             return teta;
+        }
+
+        public static void scoring(int x)
+        {
+            Console.SetCursorPosition(100, 20);
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("You Lost!!");
+            Console.SetCursorPosition(100, 21);
+            Console.WriteLine("Your score is {0}", x);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
